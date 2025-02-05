@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const chatURL="https://chat-app-backend-2ph1.onrender.com/api"
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +14,7 @@ const Login = () => {
     setError("");
   
     try {
-      const response = await fetch("http://localhost:5000/api/auths/login", {
+      const response = await fetch(`${chatURL}/auths/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,6 +40,7 @@ const Login = () => {
       }
   
       // Login successful
+      localStorage.setItem("userEmail",data.user.email);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("token", data.token);
   

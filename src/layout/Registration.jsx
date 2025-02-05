@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
+const chatURL="https://chat-app-backend-2ph1.onrender.com/api"
 // Initialize WebSocket connection
-const socket = io("http://localhost:5000");
+const socket = io("https://chat-app-backend-2ph1.onrender.com");
 
 socket.on("connect", () => {
   console.log(`Connected to WebSocket server with ID: ${socket.id}`);
@@ -20,7 +21,7 @@ const Register = () => {
     e.preventDefault();
     try {
       // Update URL to match the backend route ("/api/auths/register")
-      const response = await fetch('http://localhost:5000/api/auths/register', {
+      const response = await fetch(`${chatURL}/auths/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
