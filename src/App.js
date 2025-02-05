@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import Register from './layout/Registration';
-import Login from './layout/Login';
-import ChatApp from './layout/chatApp';
-import VerifyEmail from './components/verifyEmail'; // Rename to start with uppercase
+import { BrowserRouter as Router, Route, Routes, Navigate, useSearchParams } from "react-router-dom";
+import Register from "./layout/Registration";
+import Login from "./layout/Login";
+import ChatApp from "./layout/chatApp";
+import VerifyEmail from "./components/verifyEmail";
+import Invite from "./layout/Invitebutton";
 
-// Define a Home or landing page
 function Home() {
   return (
     <div className="bg-white p-64 rounded-lg shadow-inner text-center">
@@ -17,10 +17,21 @@ function Home() {
   );
 }
 
-// Protect routes using token validation
 const ProtectedRoute = ({ element }) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   return token ? element : <Navigate to="/login" />;
+};
+
+// 🔴 Fixing Invite Link Handling
+const RegisterWithInvite = () => {
+  const [searchParams] = useSearchParams();
+  const inviteId = searchParams.get("invite");
+
+  if (!inviteId) {
+    return <div>Invalid or Expired Invite Link.</div>;
+  }
+
+  return <Register inviteId={inviteId} />;
 };
 
 function App() {
@@ -28,13 +39,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterWithInvite />} />
         <Route path="/login" element={<Login />} />
-        
-        {/* Add the VerifyEmail route */}
-        <Route path="/verify-email/:token" element={<VerifyEmail />} /> {/* Corrected the component name */}
-        
-        {/* Protected route for ChatApp */}
+        <Route path="/invite" element={<Invite />} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
         <Route path="/chat" element={<ProtectedRoute element={<ChatApp />} />} />
       </Routes>
     </Router>
